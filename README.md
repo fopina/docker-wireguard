@@ -1,0 +1,1 @@
+docker run --rm -ti --privileged -p80:80/udp -v test:/etc/wireguard fopina/wireguard
