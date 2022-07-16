@@ -1,21 +1,20 @@
 #!/bin/sh
 
-CONF_FILE="/etc/wireguard/wg0.conf"
-if [ ! -e "${CONF_FILE}" ]; then
-    echo "${CONF_FILE} not found, generating one"
+if [ ! -e "${WG_CONF_FILE}" ]; then
+    echo "${WG_CONF_FILE} not found, generating one"
     wg genkey | tee /etc/wireguard/server.key | wg pubkey > /etc/wireguard/server.pub
     cat <<EOF > ${CONF_FILE}
 [Interface]
-Address = 10.253.3.1/24
+Address = ${WG_SUBNET}.1/24
 SaveConfig = true
 PrivateKey = `cat /etc/wireguard/server.key`
-ListenPort = 51900
+ListenPort = ${WG_PORT}
 
 PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
 
 EOF
-    add_peer.sh peer1 10.253.3.2
+    add_peer.sh peer1 ${WG_SUBNET}.2
 fi
 
 
@@ -23,12 +22,12 @@ fi
 
 _term() {
   echo "Caught SIGTERM signal!"
-  wg-quick down wg0
+  wg-quick down "${WG_ETH_OUT}"
 }
 
 trap _term SIGTERM
 
-wg-quick up wg0
+wg-quick up "${WG_ETH_OUT}"
 
 sleep infinity &
 
