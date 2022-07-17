@@ -28,4 +28,4 @@ Available environment variables:
 | WG_PORT | listening port | 51900 |
 | WG_CONF_FILE | path to configuration file | /etc/wireguard/wg0.conf |
 | WG_SUBNET | Subnet prefix to use | 10.253.3 |
-| WG_ETH_OUT | wireguard output device to create | wg0 |
+| WG_ETH_OUT | output device to create | eth0 |
