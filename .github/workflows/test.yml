@@ -22,13 +22,13 @@ jobs:
 
       - name: Check version
         id: this_version
-        uses: ./.github/actions/docker-apk-version
+        uses: fopina/docker-postfix-relay/.github/actions/docker-apk-version@f637576
         with:
           image: test-build
 
       - name: Get latest version
         id: latest_version
-        uses: ./.github/actions/docker-apk-version
+        uses: fopina/docker-postfix-relay/.github/actions/docker-apk-version@f637576
 
       - uses: actions/github-script@v3
         if: steps.this_version.outputs.version != steps.latest_version.outputs.version
