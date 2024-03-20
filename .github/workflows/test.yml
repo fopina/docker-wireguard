@@ -1,0 +1,47 @@
+name: test build
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Build
+        uses: docker/build-push-action@v5
+        with:
+          load: true
+          tags: |
+            test-build
+
+      - name: Check version
+        id: this_version
+        uses: fopina/docker-postfix-relay/.github/actions/docker-apk-version@f637576f44c06509e69afe61779fe1b9a2921da7
+        with:
+          image: test-build
+          package: wireguard-tools
+
+      - name: Get latest version
+        id: latest_version
+        uses: fopina/docker-postfix-relay/.github/actions/docker-apk-version@f637576f44c06509e69afe61779fe1b9a2921da7
+        with:
+          image: fopina/wireguard:latest
+          package: wireguard-tools
+
+      - uses: actions/github-script@v3
+        if: steps.this_version.outputs.version != steps.latest_version.outputs.version
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '👋 wireguard version updated from ${{ steps.latest_version.outputs.version }} to ${{ steps.this_version.outputs.version }}'
+            })
