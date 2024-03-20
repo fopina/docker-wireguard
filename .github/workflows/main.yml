@@ -2,11 +2,11 @@ name: publish to dockerhub
 
 on:
   push:
-    branches-ignore:
-      - '**'
-    tags:
-      - '*.*.*'
-      - '*.*.*-*'
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+
 jobs:
   build:
     name: publish to dockerhub

@@ -1,0 +1,34 @@
+name: auto update
+
+on:
+  schedule:
+    - cron: "0 12 * * *"
+  workflow_dispatch:
+    inputs:
+
+jobs:
+  autoupdate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get latest version
+        id: used_version
+        uses: fopina/docker-postfix-relay/.github/actions/docker-apk-version@f637576f44c06509e69afe61779fe1b9a2921da7
+        with:
+          image: fopina/wireguard:latest
+          package: wireguard-tools
+
+      - name: Get latest version
+        id: latest_version
+        shell: bash
+        run: |
+            echo "version=$(docker run --rm \
+                                       alpine \
+                                       sh -c "apk update && apk info wireguard-tools" | grep ' description:$' | cut -d ' ' -f1 | cut -d '-' -f2-)" \
+                 >> $GITHUB_OUTPUT
+
+      - name: Check for any new
+        if: steps.used_version.outputs.version != steps.latest_version.outputs.version
+        run: |
+            echo "### New Version" >> $GITHUB_STEP_SUMMARY
+            echo wireguard-tools version updated from ${{ steps.used_version.outputs.version }} to ${{ steps.latest_version.outputs.version }} >> $GITHUB_STEP_SUMMARY
+            exit 1
