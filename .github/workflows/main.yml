@@ -46,6 +46,7 @@ jobs:
         uses: fopina/docker-postfix-relay/.github/actions/docker-apk-version@f637576f44c06509e69afe61779fe1b9a2921da7
         with:
           image: test-build
+          package: wireguard-tools
 
       - name: Build and push
         uses: docker/build-push-action@v5
@@ -63,5 +64,5 @@ jobs:
       - name: Check for any new
         run: |
             echo "### Published" >> $GITHUB_STEP_SUMMARY
-            echo "`fopina/postfix-relay:${{ steps.this_version.outputs.version }}-${{ github.run_number }}`" >> $GITHUB_STEP_SUMMARY
-            echo "`ghcr.io/fopina/postfix-relay:${{ steps.this_version.outputs.version }}-${{ github.run_number }}`" >> $GITHUB_STEP_SUMMARY
+            echo "`fopina/wireguard:${{ steps.this_version.outputs.version }}-${{ github.run_number }}`" >> $GITHUB_STEP_SUMMARY
+            echo "`ghcr.io/fopina/wireguard:${{ steps.this_version.outputs.version }}-${{ github.run_number }}`" >> $GITHUB_STEP_SUMMARY
