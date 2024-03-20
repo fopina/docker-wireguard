@@ -43,7 +43,7 @@ jobs:
 
       - name: Check version
         id: this_version
-        uses: fopina/docker-postfix-relay/.github/actions/docker-apk-version@f637576
+        uses: fopina/docker-postfix-relay/.github/actions/docker-apk-version@f637576f44c06509e69afe61779fe1b9a2921da7
         with:
           image: test-build
 
