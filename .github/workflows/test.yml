@@ -22,14 +22,14 @@ jobs:
 
       - name: Check version
         id: this_version
-        uses: fopina/docker-postfix-relay/.github/actions/docker-apk-version@f637576f44c06509e69afe61779fe1b9a2921da7
+        uses: fopina/docker-postfix-relay/.github/actions/docker-apk-version@587173caaa0614a23130856565202d30870c62fc
         with:
           image: test-build
           package: wireguard-tools
 
       - name: Get latest version
         id: latest_version
-        uses: fopina/docker-postfix-relay/.github/actions/docker-apk-version@f637576f44c06509e69afe61779fe1b9a2921da7
+        uses: fopina/docker-postfix-relay/.github/actions/docker-apk-version@587173caaa0614a23130856565202d30870c62fc
         with:
           image: fopina/wireguard:latest
           package: wireguard-tools
