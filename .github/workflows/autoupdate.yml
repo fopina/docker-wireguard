@@ -10,21 +10,20 @@ jobs:
   autoupdate:
     runs-on: ubuntu-latest
     steps:
-      - name: Get latest version
+      - name: Get last version
         id: used_version
-        uses: fopina/docker-postfix-relay/.github/actions/docker-apk-version@f637576f44c06509e69afe61779fe1b9a2921da7
+        uses: fopina/docker-postfix-relay/.github/actions/docker-apk-version@587173caaa0614a23130856565202d30870c62fc
         with:
           image: fopina/wireguard:latest
           package: wireguard-tools
 
       - name: Get latest version
         id: latest_version
-        shell: bash
-        run: |
-            echo "version=$(docker run --rm \
-                                       alpine \
-                                       sh -c "apk update && apk info wireguard-tools" | grep ' description:$' | cut -d ' ' -f1 | cut -d '-' -f2-)" \
-                 >> $GITHUB_OUTPUT
+        uses: fopina/docker-postfix-relay/.github/actions/docker-apk-version@587173caaa0614a23130856565202d30870c62fc
+        with:
+          image: alpine:latest
+          package: wireguard-tools
+          install: true
 
       - name: Check for any new
         if: steps.used_version.outputs.version != steps.latest_version.outputs.version
