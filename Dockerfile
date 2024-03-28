@@ -1,6 +1,6 @@
 FROM alpine:3.19
 
-RUN apk add wireguard-tools libqrencode
+RUN apk add wireguard-tools libqrencode iptables
 
 COPY bin /usr/bin
 
