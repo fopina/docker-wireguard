@@ -1,3 +1,5 @@
+> No longer maintained, I've moved to tailscale
+
 # quickstart
 
 ```
