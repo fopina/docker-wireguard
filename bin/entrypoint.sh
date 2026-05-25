@@ -22,7 +22,7 @@ fi
 
 _term() {
   echo "Caught SIGTERM signal!"
-  wg-quick down wg0
+  wg-quick down ${WG_CONF_FILE}
 }
 
 trap _term SIGTERM
