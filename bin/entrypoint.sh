@@ -27,7 +27,9 @@ _term() {
 
 trap _term SIGTERM
 
-# resolvconf -u || true
+# let openresolv take control of resolv.conf - same as in https://github.com/linuxserver/docker-wireguard/blob/master/root/etc/s6-overlay/s6-rc.d/init-wireguard-confs/run
+resolvconf -a control 2>/dev/null < /etc/resolv.conf
+resolvconf -u
 
 wg-quick up ${WG_CONF_FILE}
 
