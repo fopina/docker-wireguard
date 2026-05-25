@@ -3,7 +3,7 @@
 if [ ! -e "${WG_CONF_FILE}" ]; then
     echo "${WG_CONF_FILE} not found, generating one"
     wg genkey | tee /etc/wireguard/server.key | wg pubkey > /etc/wireguard/server.pub
-    cat <<EOF > ${CONF_FILE}
+    cat <<EOF > ${WG_CONF_FILE}
 [Interface]
 Address = ${WG_SUBNET}.1/24
 SaveConfig = true
@@ -27,7 +27,9 @@ _term() {
 
 trap _term SIGTERM
 
-wg-quick up wg0
+# resolvconf -u || true
+
+wg-quick up ${WG_CONF_FILE}
 
 sleep infinity &
 
