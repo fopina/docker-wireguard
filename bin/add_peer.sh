@@ -1,6 +1,6 @@
 #!/bin/sh
 
-CONF_FILE="/etc/wireguard/wg0.conf"
+CONF_FILE="${WG_CONF_FILE:-/etc/wireguard/wg0.conf}"
 
 if [ -z "$2" ]; then
     echo "Usage: $0 peer_name peer_ip"
