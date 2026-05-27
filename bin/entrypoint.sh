@@ -3,7 +3,7 @@
 if [ ! -e "${WG_CONF_FILE}" ]; then
     echo "${WG_CONF_FILE} not found, generating one"
     wg genkey | tee /etc/wireguard/server.key | wg pubkey > /etc/wireguard/server.pub
-    cat <<EOF > ${CONF_FILE}
+    cat <<EOF > ${WG_CONF_FILE}
 [Interface]
 Address = ${WG_SUBNET}.1/24
 SaveConfig = true
@@ -22,12 +22,16 @@ fi
 
 _term() {
   echo "Caught SIGTERM signal!"
-  wg-quick down wg0
+  wg-quick down ${WG_CONF_FILE}
 }
 
 trap _term SIGTERM
 
-wg-quick up wg0
+# let openresolv take control of resolv.conf - same as in https://github.com/linuxserver/docker-wireguard/blob/master/root/etc/s6-overlay/s6-rc.d/init-wireguard-confs/run
+resolvconf -a control 2>/dev/null < /etc/resolv.conf
+resolvconf -u
+
+wg-quick up ${WG_CONF_FILE}
 
 sleep infinity &
 
