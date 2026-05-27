@@ -39,6 +39,18 @@ docker run --name wg-client \
            fopina/wireguard
 ```
 
+There is also a Compose example that brings up the client and runs a one-shot
+`curl` container through the WireGuard network namespace. Save your client
+configuration as `examples/client.conf`, then run:
+
+```
+WG_CONF_FILE=/tmp/wg-client.conf docker compose -f examples/docker-compose.yml up --build --abort-on-container-exit --exit-code-from ip-check
+```
+
+Compose will stop the WireGuard client after `ip-check` exits, and the command
+will return the `ip-check` exit code. The Compose example uses `WG_CONF_FILE`
+for both the container environment and the mount target.
+
 Example client configuration:
 
 ```
