@@ -24,23 +24,20 @@ docker exec -ti wg show_peer.sh peer1
 
 ## client
 
-To use this image as a WireGuard client, provide an existing WireGuard
-configuration file. When `WG_CONF_FILE` already exists, the container skips the
-server configuration generation and runs `wg-quick up` with that file.
+To use this image as a WireGuard client, mount an existing WireGuard
+configuration file and point `WG_CONF_FILE` at it. The container will skip server
+configuration generation and run `wg-quick up` with that file.
 
-For example, save your client configuration as `wg0.conf` and run:
+For example, save your client configuration as `client.conf` and run:
 
 ```
 docker run --name wg-client \
            -d \
            --privileged \
-           -v "$PWD/wg0.conf:/etc/wireguard/wg0.conf:ro" \
+           -e WG_CONF_FILE=/etc/wireguard/client.conf \
+           -v "$PWD/client.conf:/etc/wireguard/client.conf:ro" \
            fopina/wireguard
 ```
-
-The client configuration can include a `DNS = ...` line. The entrypoint prepares
-`resolvconf` before starting WireGuard so `wg-quick` can apply those DNS
-settings.
 
 Example client configuration:
 
