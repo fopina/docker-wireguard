@@ -7,4 +7,11 @@ fi
 
 PEER_NAME=$1
 
-qrencode -t ansiutf8 < /etc/wireguard/${PEER_NAME}.conf
+case "$PEER_NAME" in
+    ''|*[!A-Za-z0-9_-]*)
+        echo "Peer name may contain only letters, numbers, underscores, and hyphens" >&2
+        exit 2
+        ;;
+esac
+
+qrencode -t ansiutf8 < "/etc/wireguard/${PEER_NAME}.conf"

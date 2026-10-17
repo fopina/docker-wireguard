@@ -16,6 +16,9 @@ Helper scripts to manage peers:
 docker exec -ti wg add_peer.sh peer1 10.253.3.2
 ```
 
+The command appends the peer to the server configuration but does not change the
+running interface. Restart the WireGuard interface for the peer to take effect.
+
 ```
 docker exec -ti wg show_peer.sh peer1
 ```

@@ -8,13 +8,19 @@ services:
     container_name: wg-client
     privileged: true
     environment:
-      WG_CONF_FILE: ${WG_CONF_FILE}
+      WG_CONF_FILE: ${WG_CONF_FILE:?Set WG_CONF_FILE to the client config path}
     volumes:
-      - ${WG_CONF_FILE}:${WG_CONF_FILE}:ro
+      - ${WG_CONF_FILE:?Set WG_CONF_FILE to the client config path}:${WG_CONF_FILE:?Set WG_CONF_FILE to the client config path}:ro
+    healthcheck:
+      test: ["CMD-SHELL", "conf=$${WG_CONF_FILE##*/}; iface=$${conf%.conf}; wg show $$iface >/dev/null 2>&1"]
+      interval: 2s
+      timeout: 2s
+      retries: 15
 
   ip-check:
     image: alpine:3.24
     depends_on:
-      - wg-client
+      wg-client:
+        condition: service_healthy
     network_mode: service:wg-client
     command: sh -c "apk add --no-cache curl && curl ipinfo.io/ip"
