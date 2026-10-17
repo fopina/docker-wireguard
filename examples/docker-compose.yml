@@ -13,7 +13,7 @@ services:
       - ${WG_CONF_FILE}:${WG_CONF_FILE}:ro
 
   ip-check:
-    image: alpine:3.23
+    image: alpine:3.24
     depends_on:
       - wg-client
     network_mode: service:wg-client
